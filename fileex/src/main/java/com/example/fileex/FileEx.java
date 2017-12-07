@@ -13,6 +13,7 @@ import java.util.Map;
 
 public class FileEx {
 
+	
 	private Map<String,String> directoryPathMap=new LinkedHashMap<>();
 	private Map<String,String> filesPathMap=new LinkedHashMap<>();
 	
@@ -54,7 +55,12 @@ public class FileEx {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Method to go up from current directory
+	 * 
+	 * @return
+	 */
 	public boolean goUp(){
 		if(previousDir==null)
 			return false;
@@ -68,7 +74,13 @@ public class FileEx {
 		
 		return true;
 	}
-	
+
+	/**
+	 * Method to set current directory
+	 * 
+	 * @param dir
+	 * @return
+	 */
 	public boolean setCurrentDir(String dir){
 		if(isExists(dir)){
 			currentDir=dir;
@@ -77,7 +89,12 @@ public class FileEx {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Method to list all contents in current directory
+	 * 
+	 * @return
+	 */
 	public List<String> listFiles(){
 		file=new File(currentDir);
 		files=file.listFiles();
@@ -108,16 +125,33 @@ public class FileEx {
 		completeList.addAll(tempList);
 		return completeList;
 	}
-	
+
+	/**
+	 * Method to check whether the given path exist or not
+	 * 
+	 * @param dir
+	 * @return
+	 */
 	public boolean isExists(String dir){
 		if(dir==null)
 			return false;
 		return new File(dir).exists();
 	}
-	
+
+	/**
+	 * Method to get Current directory
+	 * 
+	 * @return
+	 */
 	public String getCurrentDir(){
 		return currentDir;
 	}
+
+	/**
+	 * Method to get complete path of given file name
+	 * @param file
+	 * @return
+	 */
 	
 	public String getFilePath(String file){
 		
@@ -128,7 +162,13 @@ public class FileEx {
 		}
 		 
 	}
-	
+
+	/**
+	 * Method to open given dir
+	 * 
+	 * @param dir
+	 * @return
+	 */
 	public List<String> openDir(String dir){
 		if(isExists(currentDir+"/"+dir)){
             previousDir=currentDir;
@@ -138,12 +178,24 @@ public class FileEx {
 			return null;
 	}
 
+	/**
+	 * Method to check whether the given path is file or dir 
+	 * 
+	 * @param name
+	 * @return
+	 */
 	public boolean isFile(String name){
 		if(new File(getCurrentDir()+"/"+name).isFile())
 			return true;
 		return false;
 	}
 
+    /**
+     * Method that return openable intent according to the file type
+     * 
+     * @param fl
+     * @return
+     */
 	public Intent getOpenableIntent(String fl){
 		if(isExists(getCurrentDir()+"/"+fl) && new File(getCurrentDir()+"/"+fl)
                 .isFile()) {
@@ -160,3 +212,4 @@ public class FileEx {
 			return null;
 	}
 }
+
