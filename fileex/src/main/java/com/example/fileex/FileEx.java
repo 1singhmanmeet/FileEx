@@ -5,13 +5,16 @@ import android.net.Uri;
 import android.webkit.MimeTypeMap;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class FileEx {
+
 
 	private Map<String,String> directoryPathMap=new LinkedHashMap<>();
 	private Map<String,String> filesPathMap=new LinkedHashMap<>();
@@ -25,7 +28,8 @@ public class FileEx {
 	private File[] files;
 	
 	private String tempDir=null;
-	
+
+	private SimpleDateFormat simpleDateFormat=new SimpleDateFormat("DD/MM/YYY HH:mm:ss", Locale.US);
 	
 	private static FileEx fileEx =null;
 	
@@ -54,7 +58,12 @@ public class FileEx {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Method to go up from current directory
+	 *
+	 * @return
+	 */
 	public boolean goUp(){
 		if(previousDir==null)
 			return false;
@@ -68,7 +77,13 @@ public class FileEx {
 		
 		return true;
 	}
-	
+
+	/**
+	 * Method to set current directory
+	 *
+	 * @param dir
+	 * @return
+	 */
 	public boolean setCurrentDir(String dir){
 		if(isExists(dir)){
 			currentDir=dir;
@@ -77,7 +92,12 @@ public class FileEx {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Method to list all contents in current directory
+	 *
+	 * @return
+	 */
 	public List<String> listFiles(){
 		file=new File(currentDir);
 		files=file.listFiles();
@@ -108,17 +128,38 @@ public class FileEx {
 		completeList.addAll(tempList);
 		return completeList;
 	}
-	
+
+	/**
+	 * Method to check whether the given path exist or not
+	 *
+	 * @param dir
+	 * @return
+	 */
+
 	public boolean isExists(String dir){
+
 		if(dir==null)
 			return false;
 		return new File(dir).exists();
 	}
-	
+
+
+
+	/**
+	 * Method to get Current directory
+	 *
+	 * @return
+	 */
 	public String getCurrentDir(){
 		return currentDir;
 	}
-	
+
+	/**
+	 * Method to get complete path of given file name
+	 * @param file
+	 * @return
+	 */
+
 	public String getFilePath(String file){
 		
 		try{
@@ -128,7 +169,13 @@ public class FileEx {
 		}
 		 
 	}
-	
+
+	/**
+	 * Method to open given dir
+	 *
+	 * @param dir
+	 * @return
+	 */
 	public List<String> openDir(String dir){
 		if(isExists(currentDir+"/"+dir)){
             previousDir=currentDir;
@@ -138,12 +185,24 @@ public class FileEx {
 			return null;
 	}
 
+	/**
+	 * Method to check whether the given path is file or dir
+	 *
+	 * @param name
+	 * @return
+	 */
 	public boolean isFile(String name){
 		if(new File(getCurrentDir()+"/"+name).isFile())
 			return true;
 		return false;
 	}
 
+    /**
+     * Method that return openable intent according to the file type
+     *
+     * @param fl
+     * @return
+     */
 	public Intent getOpenableIntent(String fl){
 		if(isExists(getCurrentDir()+"/"+fl) && new File(getCurrentDir()+"/"+fl)
                 .isFile()) {
@@ -159,4 +218,39 @@ public class FileEx {
 		else
 			return null;
 	}
+
+	public String getInfo(String file){
+	    if(isExists(file)){
+	        return simpleDateFormat.format(new File(file).lastModified());
+        }
+        return null;
+    }
+
+	public String getFileSize(String file){
+	    double size=0;
+	    StringBuilder unit=new StringBuilder("");
+	    if(isExists(file)){
+            size=((double)new File(file).length())/(1024);
+            if(size > 1000){
+                size/=1024;
+                unit.append("KB");
+
+            }
+            if(size > 1000){
+                size/=1024;
+                unit.delete(0,unit.length());
+                unit.append("MB");
+
+            }
+
+            if(size > 1000){
+                size/=1024;
+                unit.delete(0,unit.length());
+                unit.append("GB");
+
+            }
+
+        }
+        return size+" "+String.format("%.2f", unit);
+    }
 }
