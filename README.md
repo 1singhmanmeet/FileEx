@@ -19,7 +19,7 @@ Add the dependency
 
 ```
 	dependencies {
-	        compile 'com.github.1singhmanmeet:FileEx:v1.0.1'
+	        compile 'com.github.1singhmanmeet:FileEx:v1.0.2'
 	}
 
 ```
@@ -45,6 +45,8 @@ public boolean isExists(String path)              // returns true if the given p
 public List<String> listFiles()                   // returns list of contents in current directory
 public boolean setCurrentDir(String dir)          // set the currrent directory to given directory
 public boolean goUp()                             // go up from current directory.
+public String getFileSize(String fileName)        // return file sie in appropriate units.
+public String getInfo(String fileName)		  // return last modified info.
 
 ```
 
