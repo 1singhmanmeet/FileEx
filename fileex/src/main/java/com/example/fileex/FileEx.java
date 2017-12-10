@@ -42,10 +42,11 @@ public class FileEx {
 	
 	public static FileEx newFileManager(String dir){
 		
-		fileEx =new FileEx(dir);
-		currentDir=dir;
-		previousDir=null;
-		
+		if(fileEx==null){
+		   fileEx=new FileEx(dir);
+		   currentDir=dir;
+		   previousDir=null;
+		}
 		return fileEx;
 	}
 	
