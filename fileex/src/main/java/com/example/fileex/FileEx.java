@@ -2,6 +2,7 @@ package com.example.fileex;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import java.io.File;
@@ -29,7 +30,7 @@ public class FileEx {
 	
 	private String tempDir=null;
 
-	private SimpleDateFormat simpleDateFormat=new SimpleDateFormat("DD/MM/YYY HH:mm:ss", Locale.US);
+	private SimpleDateFormat simpleDateFormat=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 	
 	private static FileEx fileEx =null;
 	
@@ -42,11 +43,10 @@ public class FileEx {
 	
 	public static FileEx newFileManager(String dir){
 		
-		if(fileEx==null){
-		   fileEx=new FileEx(dir);
-		   currentDir=dir;
-		   previousDir=null;
-		}
+		fileEx =new FileEx(dir);
+		currentDir=dir;
+		previousDir=null;
+		
 		return fileEx;
 	}
 	
@@ -193,7 +193,7 @@ public class FileEx {
 	 * @return
 	 */
 	public boolean isFile(String name){
-		if(new File(getCurrentDir()+"/"+name).isFile())
+		if(new File(currentDir+"/"+name).isFile())
 			return true;
 		return false;
 	}
@@ -204,11 +204,12 @@ public class FileEx {
      * @param fl
      * @return
      */
+
 	public Intent getOpenableIntent(String fl){
-		if(isExists(getCurrentDir()+"/"+fl) && new File(getCurrentDir()+"/"+fl)
+		if(isExists(currentDir+"/"+fl) && new File(currentDir+"/"+fl)
                 .isFile()) {
 			Intent intent = new Intent(Intent.ACTION_VIEW);
-			Uri uri = Uri.fromFile(new File(getCurrentDir()+"/"+fl));
+			Uri uri = Uri.fromFile(new File(currentDir+"/"+fl));
 
 			String type=MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap
 					.getFileExtensionFromUrl(uri.toString()));
@@ -221,30 +222,34 @@ public class FileEx {
 	}
 
 	public String getInfo(String file){
-	    if(isExists(file)){
-	        return simpleDateFormat.format(new File(file).lastModified());
+	    if(isExists(currentDir+"/"+file)){
+	        return simpleDateFormat.format(new File(currentDir+"/"+file)
+					.lastModified());
         }
         return null;
     }
 
+
 	public String getFileSize(String file){
 	    double size=0;
 	    StringBuilder unit=new StringBuilder("");
-	    if(isExists(file)){
-            size=((double)new File(file).length())/(1024);
-            if(size > 1000){
+	    if(isExists(getFilePath(file))){
+	        size=((double)new File(currentDir+"/"+file).length());
+            unit.append("B");
+            if(size>1024) {
                 size/=1024;
+                unit.delete(0,unit.length());
                 unit.append("KB");
-
             }
-            if(size > 1000){
+
+            if(size > 1024){
                 size/=1024;
                 unit.delete(0,unit.length());
                 unit.append("MB");
 
             }
 
-            if(size > 1000){
+            if(size > 1024){
                 size/=1024;
                 unit.delete(0,unit.length());
                 unit.append("GB");
@@ -252,6 +257,8 @@ public class FileEx {
             }
 
         }
-        return size+" "+String.format("%.2f", unit);
+		Log.e("SIZE",""+size);
+		return String.format("%.2f", size)+" "+unit;
     }
 }
+
