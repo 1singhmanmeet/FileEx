@@ -233,7 +233,7 @@ public class FileEx {
 	public String getFileSize(String file){
 	    double size=0;
 	    StringBuilder unit=new StringBuilder("");
-	    if(isExists(getFilePath(file))){
+	    if(isExists(currentDir+"/"+file)){
 	        size=((double)new File(currentDir+"/"+file).length());
             unit.append("B");
             if(size>1024) {
