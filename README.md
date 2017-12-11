@@ -1,6 +1,8 @@
 # FileEx
 It is a libarary for android that let you explore your device file system. It give you a easy access to files and directories. you can get direct intent for file to run it on your device that matches with file type. 
 
+### NOTE: Earlier versions had some issues please use latest one.
+
 ## Usage
 To use in your project follow the steps given below:
 
@@ -19,7 +21,7 @@ Add the dependency
 
 ```
 	dependencies {
-	        compile 'com.github.1singhmanmeet:FileEx:v1.0.2'
+	        compile 'com.github.1singhmanmeet:FileEx:v1.0.4'
 	}
 
 ```
