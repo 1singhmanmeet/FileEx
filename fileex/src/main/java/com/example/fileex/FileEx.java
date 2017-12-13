@@ -19,7 +19,7 @@ public class FileEx {
 
 	private Map<String,String> directoryPathMap=new LinkedHashMap<>();
 	private Map<String,String> filesPathMap=new LinkedHashMap<>();
-	
+	private static final String TAG=FileEx.class.getSimpleName();
 	private List<String> completeList=new ArrayList<>();
 	private List<String> tempList=new ArrayList<>();
 	private static String currentDir="";
@@ -69,7 +69,14 @@ public class FileEx {
 		if(previousDir==null)
 			return false;
 		currentDir=previousDir;
-		tempDir=new File(previousDir).getParent();
+		try {
+			tempDir = new File(previousDir).getParent();
+
+		}catch (NullPointerException e){
+			Log.d(TAG,"You are already at root directory.");
+			return false;
+		}
+
 		if(isExists(tempDir)){
 			previousDir=tempDir;
 		}
@@ -88,7 +95,12 @@ public class FileEx {
 	public boolean setCurrentDir(String dir){
 		if(isExists(dir)){
 			currentDir=dir;
-			previousDir= new File(dir).getParent(); 
+			try {
+				previousDir = new File(dir).getParent();
+			}catch (NullPointerException e){
+				Log.e(TAG,"There is no parent for current directory.");
+				return false;
+			}
 			return true;
 		}
 		return false;
@@ -141,7 +153,12 @@ public class FileEx {
 
 		if(dir==null)
 			return false;
-		return new File(dir).exists();
+		try {
+			return new File(dir).exists();
+		}catch (NullPointerException e){
+			return false;
+		}
+
 	}
 
 
@@ -201,15 +218,15 @@ public class FileEx {
     /**
      * Method that return openable intent according to the file type
      *
-     * @param fl
+     * @param file
      * @return
      */
 
-	public Intent getOpenableIntent(String fl){
-		if(isExists(currentDir+"/"+fl) && new File(currentDir+"/"+fl)
+	public Intent getOpenableIntent(String file){
+		if(isExists(currentDir+"/"+file) && new File(currentDir+"/"+file)
                 .isFile()) {
 			Intent intent = new Intent(Intent.ACTION_VIEW);
-			Uri uri = Uri.fromFile(new File(currentDir+"/"+fl));
+			Uri uri = Uri.fromFile(new File(currentDir+"/"+file));
 
 			String type=MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap
 					.getFileExtensionFromUrl(uri.toString()));
