@@ -21,7 +21,7 @@ Add the dependency
 
 ```
 	dependencies {
-	        compile 'com.github.1singhmanmeet:FileEx:v1.0.5'
+	        compile 'com.github.1singhmanmeet:FileEx:v1.0.6
 	}
 
 ```
