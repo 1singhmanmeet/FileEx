@@ -22,6 +22,9 @@ Add the dependency
 ```
 	dependencies {
 	        compile 'com.github.1singhmanmeet:FileEx:v1.0.8
+		compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    		implementation 'io.reactivex.rxjava2:rxjava:2.1.7'
+    
 	}
 
 ```
@@ -35,6 +38,19 @@ Create instance of the FileEx class as given below:
   // e.g. to open directory /data/0/Android
   FileEx fileEx=FileEx.newFileManager("/data/0/Android");
 ```
+### Select Approch Before Use
+
+Now in new version there are two approchs to use FileEx given as follows:
+
+### 1. Directory Flow Approch
+
+In this approch you choose a directory as root directory and use library function to explore the content inside directory. 
+e.g.:- You can call <b>openDir()</b> method to open a directory <b>just by passing the name</b> (do not pass whole path tto the function) and goUp() to go to parent directory as root is set everything works like you use file manager.
+
+### 2. Random Approch
+
+In this approch doesn't matter what root directory u set you can perform requireed operation on a file but you have to give the absoulute patn of the file. All method with word <b>Absolute</b> are applicable for this approch.
+
 ### List of methods
 #### Note: For example look at the sample app project just clone the project and open in android studio (sample app may not have full functionality as we are just demonstarting the usge pattren).
 ```
@@ -49,6 +65,21 @@ public boolean setCurrentDir(String dir)          // set the currrent directory 
 public boolean goUp()                             // go up from current directory.
 public String getFileSize(String fileName)        // return file sie in appropriate units.
 public String getInfo(String fileName)		  // return last modified info.
+
+// Random Appr
+				och Methodsng getAbsoluteFileSize(String pathToFile)     // Same as getFileSize(String fileName   //  Method to copy or move a file operation will deppend on tthe selection argument.)
+Intent getAbsoluteOpenableIntent(String pathToFile)     // Same as getOpenableIntent(String fileName)
+String getAbsoluteInfo(String pathToFile)               // Same as geInfo(String fileName)
+String getAbsoluteFileSize(String file)                 // Same as getFileSize(String filename)
+
+
+// New Methods 
+
+Flowable<List<FileDirectory>> find(final String directory,final String query) //  Method ofind file insdie givven directory.
+Flowable<Integer> copyOrMoveFile(final String source, 
+				final FileInputStream sourceStream ,
+				final FileOutputStream destinationStream, final int selection)   
+//  Method to copy or move a file operation will deppend on the selection argument(FileEx.COPY or FileEx.MOVE).
 
 ```
 
